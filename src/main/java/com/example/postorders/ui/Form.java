@@ -27,7 +27,7 @@ public class Form extends UI {
     private TextField destinationName = new TextField("Destination name");
     private RadioButtonGroup<DestinationType> destinationType= getDestinationType();
     private Upload upload = getUpload();
-    private ByteArrayOutputStream ordersFile = new ByteArrayOutputStream();
+    private ByteArrayOutputStream ordersFile;
     private Button submitButton = getSubmitButton();
     @Autowired
     private UploadService uploadService;
@@ -40,7 +40,10 @@ public class Form extends UI {
     }
 
     private Upload getUpload() {
-        Upload upload = new Upload(null, (x,y) -> ordersFile);
+        Upload upload = new Upload(null, (x,y) -> {
+            ordersFile = new ByteArrayOutputStream();
+            return ordersFile;
+        });
         upload.setButtonCaption("Upload orders");
         upload.addSucceededListener(x -> {
             upload.setButtonCaption(x.getFilename());
