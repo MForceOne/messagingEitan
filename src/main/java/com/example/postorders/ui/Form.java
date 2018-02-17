@@ -78,12 +78,12 @@ public class Form extends UI {
            displayError(result.getErrorMessage());
         }
         if(result.getStatus() == UploadResult.uploadStatus.SUCCESS ){
-            displaySucess();
+            displaySuccess();
         }
 
     }
 
-    private void displaySucess() {
+    private void displaySuccess() {
         Notification.show("Success", "Orders where sent successfully",
                 Notification.Type.HUMANIZED_MESSAGE);
     }
