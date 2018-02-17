@@ -35,12 +35,17 @@ public class Form extends UI {
     private Button getSubmitButton() {
         Button result =new Button("Submit orders");
         result.addClickListener(this::SubmitForm);
+        result.setEnabled(false);
         return  result;
     }
 
     private Upload getUpload() {
         Upload upload = new Upload(null, (x,y) -> ordersFile);
         upload.setButtonCaption("Upload orders");
+        upload.addSucceededListener(x -> {
+            upload.setButtonCaption(x.getFilename());
+            submitButton.setEnabled(true);
+        });
         return upload;
     }
 
@@ -70,14 +75,18 @@ public class Form extends UI {
                 destinationType.getValue(),
                 ordersFile);
         if (result.getStatus() == UploadResult.uploadStatus.FAILURE) {
-            Notification.show("Failure", result.getErrorMessage(),
-                    Notification.Type.ERROR_MESSAGE);
+           displayError(result.getErrorMessage());
         }
         if(result.getStatus() == UploadResult.uploadStatus.SUCCESS ){
             Notification.show("Success", "Orders where sent successfully",
                     Notification.Type.HUMANIZED_MESSAGE);
         }
 
+    }
+
+    private void displayError(String errorMessage){
+        Notification.show("Failure", errorMessage,
+                Notification.Type.ERROR_MESSAGE);
     }
 
 
